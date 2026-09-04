@@ -11,15 +11,14 @@ const gridSizeButton = document.querySelector("#gridSizeButton")
 //generate a specific # of square shaped divs in div container
 function generateSquares (numOfSquares) {
     if (numOfSquares > 100) numOfSquares = 100;
-    for (let i = 0; i < numOfSquares; i++) {
-        const squareRow = document.createElement("div")
-        for (let j = 0; j < numOfSquares; j++) {
+    //calculate the size of each square
+    const squareSize = squaresDiv.clientWidth / numOfSquares
+    for (let i = 0; i < numOfSquares * numOfSquares; i++) {
             const square = document.createElement("div")
-            square.textContent = "TEST"
             square.classList.add("square")
-            squareRow.appendChild(square)
-        }
-        squaresDiv.appendChild(squareRow)
+            square.style.width = `${squareSize}px`;
+            square.style.height = `${squareSize}px`;
+            squaresDiv.appendChild(square)
     }
 }
 

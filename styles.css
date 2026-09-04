@@ -3,23 +3,20 @@ body {
     margin: 0px;
 }
 
-.etchASketch {
-    display:flex;
-    justify-content: center;
-    padding:10px;
+.etchASketch{
+    padding:20px;
 }
-
 
 .squaresContainer {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-wrap:wrap;
+    width: 700px;
+    height: 700px;
+    
 }
 
 .square {
     background-color: green;
-    border: solid 1px;
-    /* Change padding value when numbers get bigger */
-    
+    outline: solid 1px;
     flex: 1 1 auto;
 }
