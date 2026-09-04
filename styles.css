@@ -1,0 +1,25 @@
+body {
+    box-sizing: border-box;
+    margin: 0px;
+}
+
+.etchASketch {
+    display:flex;
+    justify-content: center;
+    padding:10px;
+}
+
+
+.squaresContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.square {
+    background-color: green;
+    border: solid 1px;
+    /* Change padding value when numbers get bigger */
+    
+    flex: 1 1 auto;
+}
