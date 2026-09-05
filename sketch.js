@@ -18,7 +18,6 @@ const toggleRainbowButton = document.querySelector("#toggleRainbowButton")
 const toggleHoldButton = document.querySelector("#toggleHoldButton")
 let cubeTimeout = CUBE_TIMEOUT_DEFAULT;
 let rainbowColor = false;
-let mouseIsDown = true; //might not need delte?
 let holdToggle = false;
 
 //generate a specific # of square shaped divs in div container
@@ -55,6 +54,24 @@ function colorCube(event) {
         event.target.style.backgroundColor = CUBE_COLOR_HOVER;
     }
 }
+
+//only color when mouse is being held down on squares
+function checkCube(event) {
+    if (event.target.classList.contains("square")) colorCube(event)
+}
+
+function restoreCubeColor(event) {
+    setTimeout(function(){
+        event.target.style.backgroundColor = CUBE_COLOR_DEFAULT;
+    }, cubeTimeout)
+}
+
+function dragCube(event) {
+    //check that on a cube and color it
+    checkCube(event)
+    //set timeout immediately
+    restoreCubeColor(event)
+}
 //EVENT LISTENERS
 //Mouse enter and Mouse exit creates a hover effect
 //add handler to squaresDiv parent, let event bubble to parent
@@ -69,20 +86,10 @@ squaresDiv.addEventListener("mouseover", (event) => {
     
 })
 
-squaresDiv.addEventListener("mousedown", holdColorCube)
-squaresDiv.addEventListener("dragover", holdColorCube)
-
-function holdColorCube(event) {
-    if (event.target.classList.contains("square")) colorCube(event)
-}
-squaresDiv.addEventListener("mouseout", (event) => {
-    //delete cubes after timeout # of seconds
-    setTimeout(function(){
-        event.target.style.backgroundColor = CUBE_COLOR_DEFAULT;
-    }, cubeTimeout)
-})
-
-//add event for mouseup to disable drawing
+squaresDiv.addEventListener("mouseout", restoreCubeColor)
+squaresDiv.addEventListener("mousedown", checkCube)
+squaresDiv.addEventListener("dragover", dragCube)
+// window.addEventListener("dragend", restoreCubeColor)
 
 //Buttons
 timeOutButton.addEventListener("click", () => {
