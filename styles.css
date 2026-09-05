@@ -1,12 +1,12 @@
 body {
     box-sizing: border-box;
     margin: 0px;
+    background-color:rgb(248, 27, 27) ;
 }
 
 .title {
     margin: 0px;
     padding-bottom: 10px;
-    background-color:rgb(248, 27, 27) ;
     color:rgb(216, 184, 0);
     text-align: center;
     font-style: italic;
@@ -16,14 +16,12 @@ body {
 
 .etchASketch{
     padding:20px;
-    background-color:rgb(248, 27, 27);
     display:flex;
     justify-content: center;
     border-width: 10px;
 }
 
 .buttons {
-    background-color: rgb(248, 27, 27);
     text-align: center;
     padding-bottom: 4px;
 }
@@ -60,7 +58,10 @@ body {
 
 .square {
     background-color: rgb(197, 198, 198);
-    outline: solid 1px;
     flex: 1 1 auto;
+}
+
+.square.outline {
+    outline: solid 1px;
 }
 

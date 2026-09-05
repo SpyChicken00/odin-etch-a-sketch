@@ -2,7 +2,6 @@
     Create a functional Etch a sketch with javascript html and css
     Sept 4th 2026
 
-    Additinal Ideas- Enable draw only while holding mouseButton
     Toggle Grid Outline for squares
     Add Opacity Effect
     Update Styling CSS and HTML - lower buttons
@@ -16,6 +15,7 @@ const gridSizeButton = document.querySelector("#gridSizeButton")
 const timeOutButton = document.querySelector("#timeOutButton")
 const toggleRainbowButton = document.querySelector("#toggleRainbowButton")
 const toggleHoldButton = document.querySelector("#toggleHoldButton")
+const toggleGridButton = document.querySelector("#toggleGridButton")
 let cubeTimeout = CUBE_TIMEOUT_DEFAULT;
 let rainbowColor = false;
 let holdToggle = false;
@@ -73,9 +73,9 @@ function dragCube(event) {
     restoreCubeColor(event)
 }
 //EVENT LISTENERS
-//Mouse enter and Mouse exit creates a hover effect
-//add handler to squaresDiv parent, let event bubble to parent
+//Mouse Events
 squaresDiv.addEventListener("mouseover", (event) => {
+    //if toggle enabled only draw while holding left mouse button
     if(holdToggle) {
         if(event.buttons == 1 || event.buttons == 3){
             colorCube(event);
@@ -85,13 +85,12 @@ squaresDiv.addEventListener("mouseover", (event) => {
     }
     
 })
-
 squaresDiv.addEventListener("mouseout", restoreCubeColor)
-squaresDiv.addEventListener("mousedown", checkCube)
-squaresDiv.addEventListener("dragover", dragCube)
-// window.addEventListener("dragend", restoreCubeColor)
+squaresDiv.addEventListener("mousedown", checkCube)//when clicking cubes directly
+squaresDiv.addEventListener("dragover", dragCube)//when dragging over cubes
 
-//Buttons
+
+//Button Events
 timeOutButton.addEventListener("click", () => {
     const val = parseInt(prompt("How many seconds?"))
     //check that valid number 
@@ -103,12 +102,6 @@ timeOutButton.addEventListener("click", () => {
     }
 
 })
-toggleRainbowButton.addEventListener("click", () => {
-    rainbowColor = rainbowColor ? false: true;
-})
-toggleHoldButton.addEventListener("click", () => {
-    holdToggle = holdToggle ? false: true;
-})
 gridSizeButton.addEventListener("click", () => {
     const numOfSquares = prompt("Please enter a number less than 100")
 
@@ -116,7 +109,17 @@ gridSizeButton.addEventListener("click", () => {
     removeSquares();
     generateSquares(numOfSquares)
 })
-
+toggleHoldButton.addEventListener("click", () => {
+    holdToggle = holdToggle ? false: true;
+})
+toggleGridButton.addEventListener("click", () => {
+    for (const square of Array.from(squaresDiv.children)) {
+        square.classList.toggle("outline")
+    }
+})
+toggleRainbowButton.addEventListener("click", () => {
+    rainbowColor = rainbowColor ? false: true;
+})
 
 
 generateSquares(16)
