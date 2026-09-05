@@ -49,6 +49,7 @@ body {
 }
 
 .squaresContainer {
+    background-color: rgb(197, 198, 198);
     display: flex;
     flex-wrap:wrap;
     width: 650px;
@@ -63,5 +64,9 @@ body {
 
 .square.outline {
     outline: solid 1px;
+}
+
+.square.opacity{
+    opacity: 0;
 }
 

@@ -5,6 +5,9 @@
     Toggle Grid Outline for squares
     Add Opacity Effect
     Update Styling CSS and HTML - lower buttons
+
+    Bugs: Grid sizing can get wonky if you open the developer tools 
+    or dont use a standard browser view
 */
 
 const CUBE_COLOR_DEFAULT = "rgb(197, 198, 198)"
@@ -16,9 +19,11 @@ const timeOutButton = document.querySelector("#timeOutButton")
 const toggleRainbowButton = document.querySelector("#toggleRainbowButton")
 const toggleHoldButton = document.querySelector("#toggleHoldButton")
 const toggleGridButton = document.querySelector("#toggleGridButton")
+const toggleOpacityButton = document.querySelector("#toggleOpacityButton")
 let cubeTimeout = CUBE_TIMEOUT_DEFAULT;
 let rainbowColor = false;
 let holdToggle = false;
+let opacityDrawing = false;
 
 //generate a specific # of square shaped divs in div container
 function generateSquares (numOfSquares) {
@@ -44,20 +49,33 @@ function removeSquares () {
 function randomNum (max) {
     return Math.floor(Math.random() * max)
 }
+function colorOpacity(event) {
+    if (!opacityDrawing) return;
+    //if opacity greater than 0.1 then add to it?
+    const opacityValue = parseFloat(window.getComputedStyle(event.target).getPropertyValue("opacity"))
+    console.log(`opacityValue: ${opacityValue}`)
 
+    if (opacityValue === 0) {
+        event.target.style.opacity = 0.1;
+        console.log("set Opacity to 0.1")
+    }
+    else if (opacityValue >= 0.1 && opacityValue < 1) {
+        event.target.style.opacity = parseFloat(event.target.style.opacity) + 0.1;
+        console.log("increased opacity")
+    }
+}
 function colorCube(event) {
     if (rainbowColor) {
         const randomColor = `rgb(${randomNum(256)},${randomNum(256)},${randomNum(256)})`
         event.target.style.backgroundColor = randomColor;
-    
+        
     } else {
         event.target.style.backgroundColor = CUBE_COLOR_HOVER;
     }
-}
-
-//only color when mouse is being held down on squares
-function checkCube(event) {
-    if (event.target.classList.contains("square")) colorCube(event)
+    colorOpacity(event)
+    //if opacityColor -> change opacity value of rgb to 10% only
+    //only color 10% of value, 
+    //opacity css += .1     
 }
 
 function restoreCubeColor(event) {
@@ -66,6 +84,12 @@ function restoreCubeColor(event) {
     }, cubeTimeout)
 }
 
+//only color when mouse is being held down on squares
+function checkCube(event) {
+    if (event.target.classList.contains("square")) colorCube(event)
+}
+
+//deals with dragging functionality so squares dont get stuck
 function dragCube(event) {
     //check that on a cube and color it
     checkCube(event)
@@ -120,6 +144,11 @@ toggleGridButton.addEventListener("click", () => {
 toggleRainbowButton.addEventListener("click", () => {
     rainbowColor = rainbowColor ? false: true;
 })
-
+toggleOpacityButton.addEventListener("click", () => {
+    opacityDrawing = opacityDrawing ? false: true;
+    for (const square of Array.from(squaresDiv.children)) {
+        square.classList.toggle("opacity")
+    }
+})
 
 generateSquares(16)
