@@ -8,6 +8,7 @@
     -Change brush size
     -Change colors
     -Grid and Opacity are stil strange
+    -Get user input from text-boxes or other gui elements
 
     Bugs: Grid sizing can get wonky if you open the developer tools 
     or dont use a standard browser view
