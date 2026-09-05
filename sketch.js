@@ -3,12 +3,15 @@
     Sept 4th 2026
 */
 
-
+const CUBE_COLOR_DEFAULT = "rgb(197, 198, 198)"
+const CUBE_COLOR_HOVER = "rgb(28, 28, 28)"
+const CUBE_TIMEOUT_DEFAULT = 2000;
 const squaresDiv = document.querySelector(".squaresContainer")
 const gridSizeButton = document.querySelector("#gridSizeButton")
-const CUBE_COLOR_DEFAULT = "green"
-const CUBE_COLOR_HOVER = "red"
-
+const timeOutButton = document.querySelector("#timeOutButton")
+const toggleRainbowButton = document.querySelector("#toggleRainbowButton")
+let cubeTimeout = CUBE_TIMEOUT_DEFAULT;
+let rainbowColor = false;
 
 //generate a specific # of square shaped divs in div container
 function generateSquares (numOfSquares) {
@@ -31,24 +34,50 @@ function removeSquares () {
     }
 }
      
-
+function randomNum (max) {
+    return Math.floor(Math.random() * max)
+}
 
 //Event Listeners for squares and buttons
 
 //Mouse enter and Mouse exit creates a hover effect
 //add handler to squaresDiv parent, let event bubble to parent
-//mouse enter square, change cube color
-//mouse leave square, change cube color back to
 squaresDiv.addEventListener("mouseover", (event) => {
-    event.target.style.backgroundColor = CUBE_COLOR_HOVER;
+    if (rainbowColor) {
+        const randomColor = `rgb(${randomNum(256)},${randomNum(256)},${randomNum(256)})`
+        event.target.style.backgroundColor = randomColor;
+        
+    } else {
+        event.target.style.backgroundColor = CUBE_COLOR_HOVER;
+    }
 })
 squaresDiv.addEventListener("mouseout", (event) => {
     setTimeout(function(){
         event.target.style.backgroundColor = CUBE_COLOR_DEFAULT;
-    }, 2000)
+    }, cubeTimeout)
 })
-gridSizeButton.addEventListener("click", (event) => {
-    console.log(event.target.id)
+timeOutButton.addEventListener("click", () => {
+    const val = parseInt(prompt("How many seconds?"))
+    //check that valid number 
+    if (Number.isInteger(val) && val > 0) {
+        cubeTimeout = val * 1000
+    } else {
+        console.log("invalid number, reset to default: 2 seconds")
+        cubeTimeout = CUBE_TIMEOUT_DEFAULT;
+    }
+
+})
+toggleRainbowButton.addEventListener("click", () => {
+    if (!rainbowColor) {
+        rainbowColor = true;
+    } else {
+        rainbowColor = false;
+    }
+})
+
+
+
+gridSizeButton.addEventListener("click", () => {
     const numOfSquares = prompt("Please enter a number less than 100")
 
     //remove current grid
