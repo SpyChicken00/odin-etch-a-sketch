@@ -1,10 +1,9 @@
 /*
     Create a functional Etch a sketch with javascript html and css
-    Sept 4th 2026
+    Sept 4th-5th 2026
 
     -Update Styling CSS and HTML - lower buttons
-    -Reset board and settings button
-    -Fix grid and opacity 
+    -Reset board and settings to default button
 
     Bugs: Grid sizing can get wonky if you open the developer tools 
     or dont use a standard browser view
@@ -57,15 +56,9 @@ function colorOpacity(event) {
     if (!opacityEnabled) return;
     //opacity is a string, have to parse as a float
     const opacityValue = parseFloat(window.getComputedStyle(event.target).getPropertyValue("opacity"))
-
-    // if (opacityValue === 0) {
-    //     event.target.style.opacity = 0.1;
-    // }
-    // else if (opacityValue >= 0.1 && opacityValue < 1) {
-    //     event.target.style.opacity = opacityValue + 0.1;
-    // }
-
-    if (opacityValue < 1) event.target.style.opacity = opacityValue + 0.1;
+    if (opacityValue < 1) {
+        event.target.style.opacity = opacityValue + 0.1;
+    }
 }
 
 function colorCube(event) {
@@ -81,13 +74,10 @@ function colorCube(event) {
 function restoreCubeColor(event) {
     setTimeout(function(){
         event.target.style.backgroundColor = CUBE_COLOR_DEFAULT;
-        // event.target.style.opacity = 0; //breaks grid appearance if off
-        //while opacity is on -> opacity = 0;
         if (opacityEnabled) event.target.style.opacity = 0;
         if (gridEnabled && opacityEnabled) {
             event.target.style.opacity = 0.1;
         }
-        //if off it should always stay on
     }, cubeTimeout)
 }
 
@@ -149,15 +139,7 @@ toggleHoldButton.addEventListener("click", () => {
 toggleGridButton.addEventListener("click", () => {
     gridEnabled = gridEnabled ? false : true;
     for (const square of Array.from(squaresDiv.children)) {
-        // if(opacityEnabled){
-        //     square.style.opacity = gridEnabled ? 0.1: 0;
-        // } else {
-        //     square.style.opacity = 1;
-        // }
-        square.style.opacity = 1;
-        // if (opacityEnabled) square.style.opacity = 0;
-        if (opacityEnabled && gridEnabled) square.style.opacity = 0.1;
-        square.textContent = square.style.opacity
+        square.style.opacity = (opacityEnabled && gridEnabled) ? 0.1 : 1;
         square.classList.toggle("outline")
     }
 })
