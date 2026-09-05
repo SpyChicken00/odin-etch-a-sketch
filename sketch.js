@@ -3,6 +3,7 @@
     Sept 4th 2026
 
     Additinal Ideas- Enable draw only while holding mouseButton
+    Toggle Grid Outline for squares
     Add Opacity Effect
     Update Styling CSS and HTML - lower buttons
 */
@@ -14,8 +15,11 @@ const squaresDiv = document.querySelector(".squaresContainer")
 const gridSizeButton = document.querySelector("#gridSizeButton")
 const timeOutButton = document.querySelector("#timeOutButton")
 const toggleRainbowButton = document.querySelector("#toggleRainbowButton")
+const toggleHoldButton = document.querySelector("#toggleHoldButton")
 let cubeTimeout = CUBE_TIMEOUT_DEFAULT;
 let rainbowColor = false;
+let mouseIsDown = true; //might not need delte?
+let holdToggle = false;
 
 //generate a specific # of square shaped divs in div container
 function generateSquares (numOfSquares) {
@@ -42,23 +46,43 @@ function randomNum (max) {
     return Math.floor(Math.random() * max)
 }
 
+function colorCube(event) {
+    if (rainbowColor) {
+        const randomColor = `rgb(${randomNum(256)},${randomNum(256)},${randomNum(256)})`
+        event.target.style.backgroundColor = randomColor;
+    
+    } else {
+        event.target.style.backgroundColor = CUBE_COLOR_HOVER;
+    }
+}
 //EVENT LISTENERS
 //Mouse enter and Mouse exit creates a hover effect
 //add handler to squaresDiv parent, let event bubble to parent
 squaresDiv.addEventListener("mouseover", (event) => {
-    if (rainbowColor) {
-        const randomColor = `rgb(${randomNum(256)},${randomNum(256)},${randomNum(256)})`
-        event.target.style.backgroundColor = randomColor;
-        
+    if(holdToggle) {
+        if(event.buttons == 1 || event.buttons == 3){
+            colorCube(event);
+        }
     } else {
-        event.target.style.backgroundColor = CUBE_COLOR_HOVER;
+        colorCube(event);
     }
+    
 })
+
+squaresDiv.addEventListener("mousedown", holdColorCube)
+squaresDiv.addEventListener("dragover", holdColorCube)
+
+function holdColorCube(event) {
+    if (event.target.classList.contains("square")) colorCube(event)
+}
 squaresDiv.addEventListener("mouseout", (event) => {
+    //delete cubes after timeout # of seconds
     setTimeout(function(){
         event.target.style.backgroundColor = CUBE_COLOR_DEFAULT;
     }, cubeTimeout)
 })
+
+//add event for mouseup to disable drawing
 
 //Buttons
 timeOutButton.addEventListener("click", () => {
@@ -74,6 +98,9 @@ timeOutButton.addEventListener("click", () => {
 })
 toggleRainbowButton.addEventListener("click", () => {
     rainbowColor = rainbowColor ? false: true;
+})
+toggleHoldButton.addEventListener("click", () => {
+    holdToggle = holdToggle ? false: true;
 })
 gridSizeButton.addEventListener("click", () => {
     const numOfSquares = prompt("Please enter a number less than 100")
