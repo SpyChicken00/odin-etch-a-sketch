@@ -2,12 +2,11 @@
     Create a functional Etch a sketch with javascript html and css
     Sept 4th 2026
 
-    Toggle Grid Outline for squares
-    Add Opacity Effect
     Update Styling CSS and HTML - lower buttons
 
     Bugs: Grid sizing can get wonky if you open the developer tools 
     or dont use a standard browser view
+    Grid didnt like opacity, why?
 */
 
 const CUBE_COLOR_DEFAULT = "rgb(197, 198, 198)"
@@ -51,36 +50,30 @@ function randomNum (max) {
 }
 function colorOpacity(event) {
     if (!opacityDrawing) return;
-    //if opacity greater than 0.1 then add to it?
+    //opacity is a string, have to parse as a float
     const opacityValue = parseFloat(window.getComputedStyle(event.target).getPropertyValue("opacity"))
-    console.log(`opacityValue: ${opacityValue}`)
 
     if (opacityValue === 0) {
         event.target.style.opacity = 0.1;
-        console.log("set Opacity to 0.1")
     }
     else if (opacityValue >= 0.1 && opacityValue < 1) {
-        event.target.style.opacity = parseFloat(event.target.style.opacity) + 0.1;
-        console.log("increased opacity")
+        event.target.style.opacity = opacityValue + 0.1;
     }
 }
 function colorCube(event) {
     if (rainbowColor) {
         const randomColor = `rgb(${randomNum(256)},${randomNum(256)},${randomNum(256)})`
         event.target.style.backgroundColor = randomColor;
-        
     } else {
         event.target.style.backgroundColor = CUBE_COLOR_HOVER;
     }
-    colorOpacity(event)
-    //if opacityColor -> change opacity value of rgb to 10% only
-    //only color 10% of value, 
-    //opacity css += .1     
+    colorOpacity(event)  
 }
 
 function restoreCubeColor(event) {
     setTimeout(function(){
         event.target.style.backgroundColor = CUBE_COLOR_DEFAULT;
+        event.target.style.opacity = 0;
     }, cubeTimeout)
 }
 
@@ -121,7 +114,7 @@ timeOutButton.addEventListener("click", () => {
     if (Number.isInteger(val) && val > 0) {
         cubeTimeout = val * 1000
     } else {
-        console.log(`invalid number, reset to default: ${CUBE_TIMEOUT_DEFAULT / 1000} seconds`)
+        alert(`invalid number, reset to default: ${CUBE_TIMEOUT_DEFAULT / 1000} seconds`)
         cubeTimeout = CUBE_TIMEOUT_DEFAULT;
     }
 
