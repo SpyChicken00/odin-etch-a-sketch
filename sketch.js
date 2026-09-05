@@ -2,7 +2,9 @@
     Create a functional Etch a sketch with javascript html and css
     Sept 4th 2026
 
-    Update Styling CSS and HTML - lower buttons
+    -Update Styling CSS and HTML - lower buttons
+    -Reset board and settings button
+    -Fix grid and opacity 
 
     Bugs: Grid sizing can get wonky if you open the developer tools 
     or dont use a standard browser view
@@ -20,9 +22,10 @@ const toggleHoldButton = document.querySelector("#toggleHoldButton")
 const toggleGridButton = document.querySelector("#toggleGridButton")
 const toggleOpacityButton = document.querySelector("#toggleOpacityButton")
 let cubeTimeout = CUBE_TIMEOUT_DEFAULT;
-let rainbowColor = false;
-let holdToggle = false;
-let opacityDrawing = false;
+let rainbowEnabled = false;
+let mouseIsHeld = false;
+let opacityEnabled = false;
+let gridEnabled = false;
 
 //generate a specific # of square shaped divs in div container
 function generateSquares (numOfSquares) {
@@ -44,24 +47,29 @@ function removeSquares () {
         squaresDiv.firstChild.remove();
     }
 }
+
 //generate a random number from 0 to max-1  
 function randomNum (max) {
     return Math.floor(Math.random() * max)
 }
+
 function colorOpacity(event) {
-    if (!opacityDrawing) return;
+    if (!opacityEnabled) return;
     //opacity is a string, have to parse as a float
     const opacityValue = parseFloat(window.getComputedStyle(event.target).getPropertyValue("opacity"))
 
-    if (opacityValue === 0) {
-        event.target.style.opacity = 0.1;
-    }
-    else if (opacityValue >= 0.1 && opacityValue < 1) {
-        event.target.style.opacity = opacityValue + 0.1;
-    }
+    // if (opacityValue === 0) {
+    //     event.target.style.opacity = 0.1;
+    // }
+    // else if (opacityValue >= 0.1 && opacityValue < 1) {
+    //     event.target.style.opacity = opacityValue + 0.1;
+    // }
+
+    if (opacityValue < 1) event.target.style.opacity = opacityValue + 0.1;
 }
+
 function colorCube(event) {
-    if (rainbowColor) {
+    if (rainbowEnabled) {
         const randomColor = `rgb(${randomNum(256)},${randomNum(256)},${randomNum(256)})`
         event.target.style.backgroundColor = randomColor;
     } else {
@@ -73,7 +81,13 @@ function colorCube(event) {
 function restoreCubeColor(event) {
     setTimeout(function(){
         event.target.style.backgroundColor = CUBE_COLOR_DEFAULT;
-        event.target.style.opacity = 0;
+        // event.target.style.opacity = 0; //breaks grid appearance if off
+        //while opacity is on -> opacity = 0;
+        if (opacityEnabled) event.target.style.opacity = 0;
+        if (gridEnabled && opacityEnabled) {
+            event.target.style.opacity = 0.1;
+        }
+        //if off it should always stay on
     }, cubeTimeout)
 }
 
@@ -89,11 +103,14 @@ function dragCube(event) {
     //set timeout immediately
     restoreCubeColor(event)
 }
+
+
+
 //EVENT LISTENERS
 //Mouse Events
 squaresDiv.addEventListener("mouseover", (event) => {
     //if toggle enabled only draw while holding left mouse button
-    if(holdToggle) {
+    if(mouseIsHeld) {
         if(event.buttons == 1 || event.buttons == 3){
             colorCube(event);
         }
@@ -105,6 +122,7 @@ squaresDiv.addEventListener("mouseover", (event) => {
 squaresDiv.addEventListener("mouseout", restoreCubeColor)
 squaresDiv.addEventListener("mousedown", checkCube)//when clicking cubes directly
 squaresDiv.addEventListener("dragover", dragCube)//when dragging over cubes
+
 
 
 //Button Events
@@ -121,27 +139,44 @@ timeOutButton.addEventListener("click", () => {
 })
 gridSizeButton.addEventListener("click", () => {
     const numOfSquares = prompt("Please enter a number less than 100")
-
     //remove current grid and create new grid with designated num 
     removeSquares();
     generateSquares(numOfSquares)
 })
 toggleHoldButton.addEventListener("click", () => {
-    holdToggle = holdToggle ? false: true;
+    mouseIsHeld = mouseIsHeld ? false: true;
 })
 toggleGridButton.addEventListener("click", () => {
+    gridEnabled = gridEnabled ? false : true;
     for (const square of Array.from(squaresDiv.children)) {
+        // if(opacityEnabled){
+        //     square.style.opacity = gridEnabled ? 0.1: 0;
+        // } else {
+        //     square.style.opacity = 1;
+        // }
+        square.style.opacity = 1;
+        // if (opacityEnabled) square.style.opacity = 0;
+        if (opacityEnabled && gridEnabled) square.style.opacity = 0.1;
+        square.textContent = square.style.opacity
         square.classList.toggle("outline")
     }
 })
 toggleRainbowButton.addEventListener("click", () => {
-    rainbowColor = rainbowColor ? false: true;
+    rainbowEnabled = rainbowEnabled ? false: true;
 })
 toggleOpacityButton.addEventListener("click", () => {
-    opacityDrawing = opacityDrawing ? false: true;
+    opacityEnabled = opacityEnabled ? false: true;
     for (const square of Array.from(squaresDiv.children)) {
-        square.classList.toggle("opacity")
+        if(opacityEnabled){
+            square.style.opacity = gridEnabled ? 0.1: 0;
+        } else {
+            square.style.opacity = 1;
+        }
+        
     }
 })
 
+
+
+//initialize board
 generateSquares(16)
