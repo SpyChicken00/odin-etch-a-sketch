@@ -1,6 +1,6 @@
 /*
     Create a functional Etch a sketch with javascript html and css
-    Sept 4th 2026
+    Sept 4th 2026gi
 */
 
 const CUBE_COLOR_DEFAULT = "rgb(197, 198, 198)"
@@ -33,13 +33,12 @@ function removeSquares () {
         squaresDiv.firstChild.remove();
     }
 }
-     
+//generate a random number from 0 to max-1  
 function randomNum (max) {
     return Math.floor(Math.random() * max)
 }
 
-//Event Listeners for squares and buttons
-
+//EVENT LISTENERS
 //Mouse enter and Mouse exit creates a hover effect
 //add handler to squaresDiv parent, let event bubble to parent
 squaresDiv.addEventListener("mouseover", (event) => {
@@ -56,6 +55,8 @@ squaresDiv.addEventListener("mouseout", (event) => {
         event.target.style.backgroundColor = CUBE_COLOR_DEFAULT;
     }, cubeTimeout)
 })
+
+//Buttons
 timeOutButton.addEventListener("click", () => {
     const val = parseInt(prompt("How many seconds?"))
     //check that valid number 
@@ -68,21 +69,16 @@ timeOutButton.addEventListener("click", () => {
 
 })
 toggleRainbowButton.addEventListener("click", () => {
-    if (!rainbowColor) {
-        rainbowColor = true;
-    } else {
-        rainbowColor = false;
-    }
+    rainbowColor = rainbowColor ? false: true;
 })
-
-
-
 gridSizeButton.addEventListener("click", () => {
     const numOfSquares = prompt("Please enter a number less than 100")
 
-    //remove current grid
+    //remove current grid and create new grid with designated num 
     removeSquares();
     generateSquares(numOfSquares)
 })
+
+
 
 generateSquares(16)
