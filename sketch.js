@@ -1,6 +1,10 @@
 /*
     Create a functional Etch a sketch with javascript html and css
-    Sept 4th 2026gi
+    Sept 4th 2026
+
+    Additinal Ideas- Enable draw only while holding mouseButton
+    Add Opacity Effect
+    Update Styling CSS and HTML - lower buttons
 */
 
 const CUBE_COLOR_DEFAULT = "rgb(197, 198, 198)"
@@ -63,7 +67,7 @@ timeOutButton.addEventListener("click", () => {
     if (Number.isInteger(val) && val > 0) {
         cubeTimeout = val * 1000
     } else {
-        console.log("invalid number, reset to default: 2 seconds")
+        console.log(`invalid number, reset to default: ${CUBE_TIMEOUT_DEFAULT / 1000} seconds`)
         cubeTimeout = CUBE_TIMEOUT_DEFAULT;
     }
 

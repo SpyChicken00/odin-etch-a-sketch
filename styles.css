@@ -3,19 +3,59 @@ body {
     margin: 0px;
 }
 
+.title {
+    margin: 0px;
+    padding-bottom: 10px;
+    background-color:rgb(248, 27, 27) ;
+    color:rgb(216, 184, 0);
+    text-align: center;
+    font-style: italic;
+    font-family: cursive, 'Times New Roman', Times, serif;
+    
+}
+
 .etchASketch{
     padding:20px;
     background-color:rgb(248, 27, 27);
     display:flex;
     justify-content: center;
+    border-width: 10px;
+}
+
+.buttons {
+    background-color: rgb(248, 27, 27);
+    text-align: center;
+    padding-bottom: 4px;
+}
+.buttons button{
+    font-family: cursive, 'Times New Roman', Times, serif;
+    font-size:16px;
+    background-color:rgba(114, 38, 38, 0.624);
+    color: rgb(216, 184, 0);
+}
+
+.circleHandle{
+    background-color: white;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    align-self:flex-end;
+    box-shadow: 5px 5px 5px 3px rgba(17, 17, 17, 0.382);
+}
+.circleHandle.left{
+   margin-right: 200px; 
+}
+
+.circleHandle.right{
+    margin-left: 200px;
 }
 
 .squaresContainer {
     display: flex;
     flex-wrap:wrap;
-    width: 700px;
-    height: 700px;
-    
+    width: 650px;
+    height: 650px;
+    outline: solid rgba(110, 2, 0, 0.882) 10px;
 }
 
 .square {
@@ -23,3 +63,4 @@ body {
     outline: solid 1px;
     flex: 1 1 auto;
 }
+
