@@ -4,10 +4,13 @@
 
     -Update Styling CSS and HTML - lower buttons
     -Reset board and settings to default button
+    -Eraser Functionality for noFade Mode
+    -Change brush size
+    -Change colors
+    -Grid and Opacity are stil strange
 
     Bugs: Grid sizing can get wonky if you open the developer tools 
     or dont use a standard browser view
-    Grid didnt like opacity, why?
 */
 
 const CUBE_COLOR_DEFAULT = "rgb(197, 198, 198)"
@@ -29,6 +32,7 @@ let gridEnabled = false;
 //generate a specific # of square shaped divs in div container
 function generateSquares (numOfSquares) {
     if (numOfSquares > 100) numOfSquares = 100;
+    if (numOfSquares < 1) numOfSquares = 2;
     //calculate the size of each square
     const squareSize = squaresDiv.clientWidth / numOfSquares
     for (let i = 0; i < numOfSquares * numOfSquares; i++) {
@@ -72,6 +76,7 @@ function colorCube(event) {
 }
 
 function restoreCubeColor(event) {
+    if (cubeTimeout === 0) return;
     setTimeout(function(){
         event.target.style.backgroundColor = CUBE_COLOR_DEFAULT;
         if (opacityEnabled) event.target.style.opacity = 0;
@@ -121,6 +126,9 @@ timeOutButton.addEventListener("click", () => {
     //check that valid number 
     if (Number.isInteger(val) && val > 0) {
         cubeTimeout = val * 1000
+    } else if (val === 0){
+        alert("Fade disabled")
+        cubeTimeout = 0;
     } else {
         alert(`invalid number, reset to default: ${CUBE_TIMEOUT_DEFAULT / 1000} seconds`)
         cubeTimeout = CUBE_TIMEOUT_DEFAULT;
@@ -128,7 +136,7 @@ timeOutButton.addEventListener("click", () => {
 
 })
 gridSizeButton.addEventListener("click", () => {
-    const numOfSquares = prompt("Please enter a number less than 100")
+    const numOfSquares = prompt("Enter a number between 1-100")
     //remove current grid and create new grid with designated num 
     removeSquares();
     generateSquares(numOfSquares)
@@ -149,8 +157,11 @@ toggleRainbowButton.addEventListener("click", () => {
 toggleOpacityButton.addEventListener("click", () => {
     opacityEnabled = opacityEnabled ? false: true;
     for (const square of Array.from(squaresDiv.children)) {
-        if(opacityEnabled){
-            square.style.opacity = gridEnabled ? 0.1: 0;
+        //if grid already on then activate opacity, need to turn all elements to 0.1
+        if(opacityEnabled && gridEnabled){
+            square.style.opacity = 0.1
+        } else if (opacityEnabled){
+            square.style.opacity = 0
         } else {
             square.style.opacity = 1;
         }
